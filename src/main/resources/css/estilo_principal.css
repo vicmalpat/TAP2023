@@ -1,0 +1,11 @@
+.root {
+    -fx-background-color: rgb(157, 148, 239);
+}
+
+.menu:hover{
+    -fx-background-color: rgb(111, 49, 111);
+}
+
+.menu-item:hover{
+    -fx-background-color: rgb(111, 49, 111);
+}

@@ -2,6 +2,7 @@ package com.example.tap2023;
 
 import com.example.tap2023.vistas.Calculadora;
 import com.example.tap2023.vistas.Loteria;
+import com.example.tap2023.vistas.Restaurante;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -17,7 +18,7 @@ public class HelloApplication extends Application {
     private BorderPane borderPane;
     private MenuBar menuBar;
     private Menu menuParcial1, menuParcial2, menuSalir;
-    private MenuItem mitCalculadora, mitLoteria, mitSalir;
+    private MenuItem mitCalculadora, mitLoteria, mitSalir, mitRestaurante;
 
     private void CrearGUI() {
         // Menú Items
@@ -27,11 +28,15 @@ public class HelloApplication extends Application {
         mitLoteria = new MenuItem("Lotería");
         mitLoteria.setOnAction(event -> new Loteria());
 
+        mitRestaurante = new MenuItem("Restaurante");
+        mitRestaurante.setOnAction(event -> new Restaurante());
+
         // Menú
         menuParcial1 = new Menu("Parcial 1");
         menuParcial1.getItems().addAll(mitCalculadora, mitLoteria);
 
         menuParcial2 = new Menu("Parcial 2");
+        menuParcial2.getItems().addAll(mitRestaurante);
 
         menuSalir = new Menu("Más opciones");
         mitSalir = new MenuItem("Salir");
@@ -40,7 +45,6 @@ public class HelloApplication extends Application {
 
         // MenuBar
         menuBar = new MenuBar(menuParcial1, menuParcial2, menuSalir);
-
     }
 
     private void Salir() {
@@ -58,8 +62,8 @@ public class HelloApplication extends Application {
         CrearGUI();
         borderPane = new BorderPane();
         borderPane.setTop(menuBar);
-
         escena = new Scene(borderPane, 640, 480);
+        escena.getStylesheets().add(getClass().getResource("/css/estilo_principal.css").toString());
         stage.setScene(escena);
         stage.setMaximized(true);
         stage.show();

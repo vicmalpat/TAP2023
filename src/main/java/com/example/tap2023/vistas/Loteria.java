@@ -22,7 +22,7 @@ public class Loteria extends Stage {
     private Scene escena;
     private HBox hPrincipal, hboxSel;
     private VBox vTablilla, vBaraja;
-    private Button btnAnt, btnSig, btnIniciar;
+    private Button btnAnt, btnSig, btnIniciar, btnRecargar;
     private Image imgCarta;
     private ImageView imageCarta, imvCarta;
     private final Button[][] botonTablilla = new Button[4][4];
@@ -124,15 +124,29 @@ public class Loteria extends Stage {
                 }
             }, 0, 5000);
         });
-        vBaraja = new VBox(imvCarta, btnIniciar);
+        btnRecargar = new Button("Recargar");
+        btnRecargar.setOnAction(event -> {
+            this.close();
+            actual = 0;
+            if (timer != null)
+                timer.cancel();
+            new Loteria();
+        });
+        vBaraja = new VBox(imvCarta, btnIniciar, btnRecargar);
         vBaraja.setSpacing(20);
     }
 
     public Loteria() {
         CrearGUI();
         escena = new Scene(hPrincipal, 850, 650);
+        escena.getStylesheets().add(getClass().getResource("/css/estilo_loteria.css").toString());
         this.setTitle("Lotería");
         this.setScene(escena);
+        this.setOnCloseRequest(event -> {
+            if (timer != null) {
+                timer.cancel();
+            }
+        });
         this.show();
     }
 
@@ -150,12 +164,13 @@ public class Loteria extends Stage {
         } else {
             if (contador != 16) {
                 Platform.runLater(() -> {
+                    actual = 0;
+                    timer.cancel();
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Perdedor");
                     alert.setHeaderText("Perdiste :(");
                     alert.setContentText("Has perdido");
                     alert.showAndWait();
-                    timer.cancel();
                 });
             }
             timer.cancel();
@@ -170,6 +185,7 @@ public class Loteria extends Stage {
         private List<String> arrGatos;
 
         public GridPane generarTablilla(String[] nombreGatos) {
+            contador = 0;
             gridTablilla = new GridPane();
             arrGatos = Arrays.asList(nombreGatos);
             Collections.shuffle(arrGatos);
@@ -195,6 +211,7 @@ public class Loteria extends Stage {
                                     contador++;
                                     if (contador == 16) {
                                         Platform.runLater(() -> {
+                                            actual = 0;
                                             timer.cancel();
                                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                                             alert.setTitle("Ganador");
@@ -206,7 +223,6 @@ public class Loteria extends Stage {
                                 }
                             }
                         });
-
                         gridTablilla.add(botonTablilla[i][j], i, j);
                         pos++;
                     } catch (Exception e) {
